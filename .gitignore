@@ -1,0 +1,39 @@
+# Arquivos de compilação do Flutter e Dart
+.dart_tool/
+.flutter-plugins
+.flutter-plugins-dependencies
+.packages
+.pub-cache/
+.pub/
+build/
+
+# Configurações do Android
+.gradle/
+local.properties
+*.kwks
+*.keystore
+*.jks
+gen/
+bin/
+
+# Configurações do iOS e macOS
+.generated/
+DerivedData/
+Runner.xcworkspace
+xcuserdata/
+*.mode1v3
+*.mode2v3
+*.perspectivev3
+Pods/
+ServiceDefinitions.json
+
+# Configurações de IDEs (VS Code, IntelliJ, Android Studio)
+.idea/
+.vscode/
+*.iml
+*.iws
+*.swp
+
+# Arquivos de log e sistema
+*.log
+.DS_Store
