@@ -9,7 +9,10 @@ class MainApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(home: HomePage());
+    return const MaterialApp(
+      home: HomePage(),
+      debugShowCheckedModeBanner: false,
+    );
   }
 }
 
@@ -21,12 +24,14 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  String nome = "";
-  String _avaliacao = 'Regular';
+  final TextEditingController _controller = TextEditingController();
+
+  String _nomeInput = ""; 
+  String _resultado = ""; 
+  String _tipoEntrega = 'Regular';
   bool _aceitaPromocoes = false;
   double _currentSliderValue = 0;
-
-  //SingingCharacter? _character = SingingCharacter.lafayette;
+  String? _regiaoSelecionada;
 
   @override
   Widget build(BuildContext context) {
@@ -34,171 +39,113 @@ class _HomePageState extends State<HomePage> {
       appBar: AppBar(title: const Text('Olá Flutter')),
       body: Padding(
         padding: const EdgeInsets.all(20.0),
-        child:
-        ListView(
-          //mainAxisAlignment: MainAxisAlignment.center,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text(
+            const Text(
               'Preencha com o nome do Produto:',
-              style: const TextStyle(fontSize: 32, color: Colors.black87),
+              style: TextStyle(color: Colors.black87),
             ),
-            const SizedBox(height: 20),
+            const SizedBox(height: 5),
 
             TextField(
+              controller: _controller,
               onChanged: (valor) {
                 setState(() {
-                  nome = valor;
+                  _nomeInput = valor;
                 });
               },
-              style: const TextStyle(color: Colors.black),
               decoration: const InputDecoration(
-              suffixIcon: Icon(Icons.account_box_outlined), 
-                prefixText: "Produto",
-                contentPadding: EdgeInsets.symmetric(
-                  horizontal: 15,
-                  vertical: 15,
-                ),
+                suffixIcon: Icon(Icons.account_box_outlined),
+                prefixText: "Produto ",
               ),
             ),
 
-            const SizedBox(height: 20),
+            const SizedBox(height: 5),
 
-            Text(
+            const Text(
               'Defina Quantidade:',
-              style: const TextStyle(fontSize: 32, color: Colors.black87),
+              style: TextStyle(color: Colors.black87),
             ),
 
-            const SizedBox(height: 20),
-
             Slider(
+              value: _currentSliderValue,
+              max: 100,
+              min: 0,
               onChanged: (double value) {
                 setState(() {
                   _currentSliderValue = value;
                 });
               },
-              value: _currentSliderValue,
-              max: 100,
-              min: 0,
             ),
 
-            const SizedBox(height: 20),
+            const SizedBox(height: 5),
 
-            Text(
+            const Text(
               'Escolha o tipo de Entrega:',
-              style: const TextStyle(fontSize: 32, color: Colors.black87),
+              style: TextStyle(color: Colors.black87),
             ),
 
-            const SizedBox(height: 20),
-            
-              RadioListTile<String>(
-                title: const Text("Carreto"),
-                value: 'Carreto',
-                groupValue: _avaliacao,
-                onChanged: (String? value) {
-                  setState(() => _avaliacao = value!);
-                },
-              ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Radio<String>(
+                  value: 'Carreto',
+                  groupValue: _tipoEntrega,
+                  onChanged: (v) => setState(() => _tipoEntrega = v!),
+                ),
+                const Text("Carreto"),
+                Radio<String>(
+                  value: 'Retirada',
+                  groupValue: _tipoEntrega,
+                  onChanged: (v) => setState(() => _tipoEntrega = v!),
+                ),
+                const Text("Retirada"),
+                Radio<String>(
+                  value: 'Correio',
+                  groupValue: _tipoEntrega,
+                  onChanged: (v) => setState(() => _tipoEntrega = v!),
+                ),
+                const Text("Correio"),
+              ],
+            ),
 
-              RadioListTile<String>(
-                title: const Text("Retirada"),
-                value: 'Retirada',
-                groupValue: _avaliacao,
-                onChanged: (String? value) {
-                  setState(() => _avaliacao = value!);
-                },
-              ),
+            const SizedBox(height: 5),
 
-              RadioListTile<String>(
-                title: const Text("Correio"),
-                value: 'Correio',
-                groupValue: _avaliacao,
-                onChanged: (String? value) {
-                  setState(() => _avaliacao = value!);
-                },
-              ),
-
-            const SizedBox(height: 20),
-            
-            Text(
+            const Text(
               'Escolha a Região:',
-              style: const TextStyle(fontSize: 32, color: Colors.black87),
+              style: TextStyle(color: Colors.black87),
+            ),
+              Center(
+              child: SizedBox(
+                width: 200,
+                child: DropdownButtonFormField<String>(
+                  icon: const Icon(
+                    Icons.keyboard_arrow_down,
+                  ),
+                  iconSize: 24,
+                  hint: const Text("Selecione"),
+                  isExpanded: true,
+                  decoration:
+                    const InputDecoration(
+                      contentPadding: EdgeInsets.symmetric(horizontal: 10, vertical: 8),
+                    ),
+                  items: ['Norte', 'Sul', 'Leste', 'Oeste', 'Centro']
+                      .map((String value) => DropdownMenuItem<String>(
+                            value: value,
+                            child: Text(value),
+                          ))
+                      .toList(),
+                  onChanged: (novoValor) {
+                    setState(() {
+                      _regiaoSelecionada = novoValor;
+                    });
+                  },
+                ),
+              ),
             ),
 
-            // aula06 falta 
-            const SizedBox(height: 20),
-
-
-              RadioListTile<String>(
-                title: const Text("Norte"),
-                secondary: const Icon(
-                  Icons.sentiment_dissatisfied,
-                  color: Colors.red,
-                ),
-                value: 'Ruim',
-                groupValue: _avaliacao,
-                onChanged: (String? value) {
-                  setState(() => _avaliacao = value!);
-                },
-              ),
-
-              RadioListTile<String>(
-                title: const Text("Sul"),
-                secondary: const Icon(
-                  Icons.sentiment_neutral,
-                  color: Colors.orange,
-                ),
-                value: 'Regular',
-                groupValue: _avaliacao,
-                onChanged: (String? value) {
-                  setState(() => _avaliacao = value!);
-                },
-              ),
-
-              RadioListTile<String>(
-                title: const Text("Leste"),
-                secondary: const Icon(
-                  Icons.sentiment_satisfied,
-                  color: Colors.green,
-                ),
-                value: 'Ótimo',
-                groupValue: _avaliacao,
-                onChanged: (String? value) {
-                  setState(() => _avaliacao = value!);
-                },
-              ),
-
-              RadioListTile<String>(
-                title: const Text("Oeste"),
-                secondary: const Icon(
-                  Icons.sentiment_satisfied,
-                  color: Colors.green,
-                ),
-                value: 'Ótimo',
-                groupValue: _avaliacao,
-                onChanged: (String? value) {
-                  setState(() => _avaliacao = value!);
-                },
-              ),
-
-              RadioListTile<String>(
-                title: const Text("Centro"),
-                secondary: const Icon(
-                  Icons.sentiment_satisfied,
-                  color: Colors.green,
-                ),
-                value: 'Ótimo',
-                groupValue: _avaliacao,
-                onChanged: (String? value) {
-                  setState(() => _avaliacao = value!);
-                },
-              ),
-
-            const SizedBox(height: 20),
-
-            Text(
-              'Deseja receber promoções via e-mail?:',
-              style: const TextStyle(fontSize: 32, color: Colors.black87),
-            ),
+            const SizedBox(height: 5),
 
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -211,28 +158,47 @@ class _HomePageState extends State<HomePage> {
                     });
                   },
                 ),
-                Text(
-                  "Sim, eu aceito receber promoções via e-mail.",
-                  style: TextStyle(fontSize: 18),
+                const Flexible(
+                  child: Text("Sim, eu aceito receber promoções via e-mail."),
                 ),
               ],
             ),
-            
-            SizedBox(height: 20),
 
-            OverflowBar(
-              spacing: 12,
-              children: [
-                ElevatedButton(
+            const SizedBox(height: 5),
+
+            Center(
+              child: SizedBox(
+                width: 150, 
+                child: ElevatedButton(
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color.fromARGB(255, 115, 116, 117),
-                    foregroundColor: const Color.fromARGB(255, 255, 255, 255),
+                    backgroundColor: const Color.fromARGB(255, 90, 93, 95),
+                    foregroundColor: Colors.white,
                   ),
-                  onPressed: () {},
-                  child: Text('Cadastrar'),
+                  onPressed: () {
+                    setState(() {
+                      _resultado = _nomeInput;
+
+                      _controller.clear();
+                    });
+                  },
+                  child: const Text('Cadastrar'),
                 ),
-              ],
+              ),
             ),
+
+            const SizedBox(height: 5),
+            
+            if (_resultado.isNotEmpty)
+              Padding(
+                padding: const EdgeInsets.all(10.0),
+                child: Text(
+                  'O produto selecionado foi: $_resultado, mas a quantidade escolhida foi ${_currentSliderValue.toInt()}. '
+                  'O pedido será entregue via $_tipoEntrega. Já a região será ${_regiaoSelecionada ?? "não informada"}. '
+                  'O cliente aceita envio de promoções? ${_aceitaPromocoes ? "Sim" : "Não"}.',
+                  style: const TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
+                
+                ),
+              ),
           ],
         ),
       ),
