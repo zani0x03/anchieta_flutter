@@ -1,21 +1,5 @@
 import 'package:flutter/material.dart';
 
-const String tipoCarreto = 'Carreto';
-const String tipoRetirada = 'Retirada';
-const String tipoCorreio = 'Correio';
-const String tituloPagina = 'Cadastro de Produto';
-const String labelNomeProduto = 'Nome do produto';
-const String labelRegiao = 'Região';
-const String labelAceite = 'Aceito os termos e receber e-mail';
-const String textoCadastrar = 'Cadastrar';
-const List<String> regioes = [
-  'Norte',
-  'Nordeste',
-  'Centro-Oeste',
-  'Sudeste',
-  'Sul',
-];
-
 void main() {
   runApp(const MainApp());
 }
@@ -25,7 +9,9 @@ class MainApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(home: MyHomePage());
+    return const MaterialApp(
+      home: MyHomePage(),
+    );
   }
 }
 
@@ -37,23 +23,48 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  final TextEditingController _nomeProdutoController = TextEditingController();
-  double _valorSlider = 1;
-  String _tipoSelecionado = tipoRetirada;
-  String _regiaoSelecionada = regioes.first;
-  bool _aceitaTermosEmail = false;
-  String _resultado = '';
+  final TextEditingController nomeController = TextEditingController();
+
+  double quantidade = 1;
+  String tipoEntrega = 'Retirada';
+  String regiao = 'Sudeste';
+  bool aceitaEmail = false;
+  String resultado = '';
 
   @override
   void dispose() {
-    _nomeProdutoController.dispose();
+    nomeController.dispose();
     super.dispose();
+  }
+
+  void cadastrarProduto() {
+    String nome = nomeController.text.trim();
+
+    if (nome.isEmpty) {
+      setState(() {
+        resultado = 'Digite o nome do produto.';
+      });
+      return;
+    }
+
+    setState(() {
+      resultado =
+          'Produto: $nome\n'
+          'Quantidade: ${quantidade.toStringAsFixed(0)}\n'
+          'Tipo de entrega: $tipoEntrega\n'
+          'Região: $regiao\n'
+          'Aceita receber e-mail: ${aceitaEmail ? 'Sim' : 'Não'}';
+
+      nomeController.clear();
+    });
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text(tituloPagina)),
+      appBar: AppBar(
+        title: const Text('Cadastro de Produto'),
+      ),
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.all(16),
@@ -61,108 +72,104 @@ class _MyHomePageState extends State<MyHomePage> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               TextField(
-                controller: _nomeProdutoController,
-                decoration: const InputDecoration(labelText: labelNomeProduto),
+                controller: nomeController,
+                decoration: const InputDecoration(
+                  labelText: 'Nome do produto',
+                ),
               ),
-              const SizedBox(height: 16),
+              const SizedBox(height: 20),
+
               const Text('Quantidade'),
               Slider(
-                value: _valorSlider,
+                value: quantidade,
                 min: 1,
                 max: 100,
-                divisions: 10,
-                label: _valorSlider.toStringAsFixed(0),
-                onChanged: (valor) {
+                divisions: 99,
+                label: quantidade.toStringAsFixed(0),
+                onChanged: (value) {
                   setState(() {
-                    _valorSlider = valor;
+                    quantidade = value;
                   });
                 },
               ),
+
+              const SizedBox(height: 10),
+              const Text('Tipo de entrega'),
+
               RadioGroup<String>(
-                groupValue: _tipoSelecionado,
-                onChanged: (valor) {
-                  if (valor == null) {
+                groupValue: tipoEntrega,
+                onChanged: (value) {
+                  if (value == null) {
                     return;
                   }
 
                   setState(() {
-                    _tipoSelecionado = valor;
+                    tipoEntrega = value;
                   });
                 },
                 child: const Column(
                   children: [
                     RadioListTile<String>(
-                      title: Text(tipoCarreto),
-                      value: tipoCarreto,
+                      title: Text('Carreto'),
+                      value: 'Carreto',
                     ),
                     RadioListTile<String>(
-                      title: Text(tipoRetirada),
-                      value: tipoRetirada,
+                      title: Text('Retirada'),
+                      value: 'Retirada',
                     ),
                     RadioListTile<String>(
-                      title: Text(tipoCorreio),
-                      value: tipoCorreio,
+                      title: Text('Correio'),
+                      value: 'Correio',
                     ),
                   ],
                 ),
               ),
-              DropdownButtonFormField<String>(
-                initialValue: _regiaoSelecionada,
-                decoration: const InputDecoration(labelText: labelRegiao),
-                items: regioes
-                    .map(
-                      (regiao) => DropdownMenuItem<String>(
-                        value: regiao,
-                        child: Text(regiao),
-                      ),
-                    )
-                    .toList(),
-                onChanged: (valor) {
-                  if (valor == null) {
-                    return;
-                  }
 
+              const SizedBox(height: 10),
+              DropdownButtonFormField<String>(
+                initialValue: regiao,
+                decoration: const InputDecoration(
+                  labelText: 'Região',
+                ),
+                items: const [
+                  DropdownMenuItem(value: 'Norte', child: Text('Norte')),
+                  DropdownMenuItem(value: 'Nordeste', child: Text('Nordeste')),
+                  DropdownMenuItem(
+                    value: 'Centro-Oeste',
+                    child: Text('Centro-Oeste'),
+                  ),
+                  DropdownMenuItem(value: 'Sudeste', child: Text('Sudeste')),
+                  DropdownMenuItem(value: 'Sul', child: Text('Sul')),
+                ],
+                onChanged: (value) {
                   setState(() {
-                    _regiaoSelecionada = valor;
+                    regiao = value!;
                   });
                 },
               ),
+
               CheckboxListTile(
                 contentPadding: EdgeInsets.zero,
-                title: const Text(labelAceite),
-                value: _aceitaTermosEmail,
-                onChanged: (valor) {
+                title: const Text('Aceito os termos e desejo receber e-mail'),
+                value: aceitaEmail,
+                onChanged: (value) {
                   setState(() {
-                    _aceitaTermosEmail = valor ?? false;
+                    aceitaEmail = value ?? false;
                   });
                 },
               ),
+
+              const SizedBox(height: 10),
               ElevatedButton(
-                onPressed: () {
-                  final nomeProduto = _nomeProdutoController.text.trim();
-
-                  if (nomeProduto.isEmpty) {
-                    setState(() {
-                      _resultado = 'Digite o nome do produto.';
-                    });
-                    return;
-                  }
-
-                  setState(() {
-                    _resultado =
-                        'Resumo do cadastro:\n'
-                        'Produto: $nomeProduto\n'
-                        'Quantidade: ${_valorSlider.toStringAsFixed(0)}\n'
-                        'Tipo de entrega: $_tipoSelecionado\n'
-                        'Região: $_regiaoSelecionada\n'
-                        'Termos/E-mail: ${_aceitaTermosEmail ? 'Aceito' : 'Não aceito'}';
-                    _nomeProdutoController.clear();
-                  });
-                },
-                child: const Text(textoCadastrar),
+                onPressed: cadastrarProduto,
+                child: const Text('Cadastrar'),
               ),
-              const SizedBox(height: 16),
-              Text(_resultado),
+
+              const SizedBox(height: 20),
+              Text(
+                resultado,
+                style: const TextStyle(fontSize: 16),
+              ),
             ],
           ),
         ),
