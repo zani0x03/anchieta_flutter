@@ -21,7 +21,7 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-
+  double _sliderValue = 0.0;
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -30,8 +30,45 @@ class _MyHomePageState extends State<MyHomePage> {
         body: Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
-            children: [Padding(padding: EdgeInsets.all(20), child: TextField(autocorrect: true, decoration: InputDecoration(labelText: "Produto", border: OutlineInputBorder())),)
- 
+            children: [
+              Text(
+                "Preenche com o nome do Produto:",
+                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)
+              ),
+              Padding(
+                padding: EdgeInsets.all(20), 
+                child: 
+                TextField(
+                  onChanged: (value) {
+                    setState(() {
+                      // depois?
+                    });
+                  },
+                  autocorrect: true, 
+                  decoration: 
+                  InputDecoration(
+                    hintText: "Nome do produto",
+                    labelText: "Produto", 
+                    border: OutlineInputBorder(),
+                    suffixIcon: Icon(Icons.person)
+                  )
+                )
+              ),
+              Text(
+                "Defina a quantidade:",
+                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)
+              ),
+              Slider(
+                value: _sliderValue, 
+                min: 0.0,
+                max: 100.0,
+                label: _sliderValue.round().toString(),
+                onChanged: (value) {
+                  setState(() {
+                    _sliderValue = value;
+                  });
+                },
+              )
             ],
           ),
         ),
