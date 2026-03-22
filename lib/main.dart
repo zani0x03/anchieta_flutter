@@ -225,7 +225,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   setState(() {
                     _result = true;
                     _nomeProdutoFinal = _nomeProduto;
-                    _quantidadeFinal = _quantidade.floor();
+                    _quantidadeFinal = _quantidade.round();
                     _entregaFinal = _entrega;
                     _regiaoFinal = _regiao;
                     _promocaoFinal = _promocao
@@ -249,7 +249,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 ? Padding(
                   padding: EdgeInsets.all(20),
                   child: Text(
-                    "O produto selecionado foi: $_nomeProdutoFinal, e a quantidade de produtos escolhida foi $_quantidadeFinal. O pedido será entregue via $_entregaFinal. Já a região de entrega será $_regiaoFinal. $_promocaoFinal",
+                    "O produto selecionado foi: $_nomeProdutoFinal, e a quantidade de produtos escolhida foi ${_quantidadeFinal?.toInt()}. O pedido será entregue via $_entregaFinal. Já a região de entrega será $_regiaoFinal. $_promocaoFinal",
                     style: TextStyle(color: Colors.green, fontWeight: FontWeight.bold),
                     textAlign: TextAlign.center,
                   ),
