@@ -143,7 +143,7 @@ class _MyHomePageState extends State<MyHomePage> {
               },
               child: const Text('Cadastrar'),
             ),
-            Text(_resultado), //teste para o add .
+            Text(_resultado), 
           ],
         ),
       ),
