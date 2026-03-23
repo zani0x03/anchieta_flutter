@@ -9,7 +9,9 @@ class MainApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(home: MyHomePage());
+    return const MaterialApp(
+      home: MyHomePage(),
+    );
   }
 }
 
@@ -21,20 +23,90 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+  final TextEditingController controller = TextEditingController();
+
+  double quantidade = 0;
+  String entrega = 'Carreto';
+  bool promocao = false;
+  String resultado = '';
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      home: Scaffold(
-        appBar: AppBar(title: Text('Olá Flutter')),
-        body: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
- 
-            ],
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Olá Flutter'),
+      ),
+      body: Column(
+        children: [
+          TextField(
+            controller: controller,
           ),
-        ),
+
+          Slider(
+            value: quantidade,
+            min: 0,
+            max: 100,
+            onChanged: (value) {
+              setState(() {
+                quantidade = value;
+              });
+            },
+          ),
+
+          RadioListTile<String>(
+            title: const Text('Carreto'),
+            value: 'Carreto',
+            groupValue: entrega,
+            onChanged: (value) {
+              setState(() {
+                entrega = value!;
+              });
+            },
+          ),
+
+          RadioListTile<String>(
+            title: const Text('Retirada'),
+            value: 'Retirada',
+            groupValue: entrega,
+            onChanged: (value) {
+              setState(() {
+                entrega = value!;
+              });
+            },
+          ),
+
+          RadioListTile<String>(
+            title: const Text('Correio'),
+            value: 'Correio',
+            groupValue: entrega,
+            onChanged: (value) {
+              setState(() {
+                entrega = value!;
+              });
+            },
+          ),
+
+          Checkbox(
+            value: promocao,
+            onChanged: (value) {
+              setState(() {
+                promocao = value!;
+              });
+            },
+          ),
+
+          ElevatedButton(
+            onPressed: () {
+              setState(() {
+                resultado = controller.text;
+                controller.clear();
+              });
+            },
+            child: const Text('Cadastrar'),
+          ),
+
+          Text(resultado),
+        ],
       ),
     );
   }
