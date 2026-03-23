@@ -27,6 +27,7 @@ class _MyHomePageState extends State<MyHomePage> {
   String? _selectedRadio = '';
   String _dropdownValue = 'Centro';
   bool _isCheckboxChecked = false;
+  String _mensagem = '';
 
   @override
   Widget build(BuildContext context) {
@@ -145,15 +146,23 @@ class _MyHomePageState extends State<MyHomePage> {
               ElevatedButton(
                 onPressed: () {
                   setState(() {
-                    
+                    _mensagem =
+                      'Produto: $_produto\n'
+                      'Valor: ${_sliderValue.round()}\n'
+                      'Entrega: $_selectedRadio\n'
+                      'Região: $_dropdownValue\n'
+                      'Promoções: ${_isCheckboxChecked ? "Sim" : "Não"}';
+
+                    _controller.clear();
                   });
-                },
+                  },
                 child: const Text('Cadastrar'),
               ),
+              if(_mensagem.isNotEmpty)...[
+                SizedBox(height: 20),
+                Text(_mensagem)
+              ]
 
-              Text(
-                'aa'
-              ),
             ],
           ),
         ),
