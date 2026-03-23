@@ -24,6 +24,7 @@ class _MyHomePageState extends State<MyHomePage> {
   final TextEditingController _controller = TextEditingController();
   double _sliderValue = 0.5;
   int _radioValue = 0;
+  String _dropdownValue = 'Opção 1';
   bool _checkboxValue = false;
   String? _resultado;
 
@@ -70,14 +71,8 @@ class _MyHomePageState extends State<MyHomePage> {
                     },
                     child: Column(
                       children: [
-                        Row(children: [
-                          Radio<int>(value: 0),
-                          Text('Entrega'),
-                        ]),
-                        Row(children: [
-                          Radio<int>(value: 1),
-                          Text('Retirada'),
-                        ]),
+                        Row(children: [Radio<int>(value: 0), Text('Entrega')]),
+                        Row(children: [Radio<int>(value: 1), Text('Retirada')]),
                       ],
                     ),
                   ),
@@ -87,12 +82,22 @@ class _MyHomePageState extends State<MyHomePage> {
                 children: [
                   Text('Selecione uma opção:'),
                   DropdownButton<String>(
-                    value: 'Opção 1',
+                    value: _dropdownValue,
                     items: [
-                      DropdownMenuItem(value: 'Opção 1', child: Text('Opção 1')),
-                      DropdownMenuItem(value: 'Opção 2', child: Text('Opção 2')),
+                      DropdownMenuItem(
+                        value: 'Opção 1',
+                        child: Text('Opção 1'),
+                      ),
+                      DropdownMenuItem(
+                        value: 'Opção 2',
+                        child: Text('Opção 2'),
+                      ),
                     ],
-                    onChanged: (value) {},
+                    onChanged: (value) {
+                      setState(() {
+                        _dropdownValue = value!;
+                      });
+                    },
                   ),
                 ],
               ),
