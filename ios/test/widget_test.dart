@@ -1,30 +1,47 @@
-// This is a basic Flutter widget test.
-//
-// To perform an interaction with a widget in your test, use the WidgetTester
-// utility in the flutter_test package. For example, you can send tap and scroll
-// gestures. You can also use WidgetTester to find child widgets in the widget
-// tree, read text, and verify that the values of widget properties are correct.
-
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-
-import 'package:ios/main.dart';
+import 'package:anchieta_flutter/main.dart'; // Ajuste o import para o seu arquivo
 
 void main() {
-  testWidgets('Counter increments smoke test', (WidgetTester tester) async {
-    // Build our app and trigger a frame.
-    await tester.pumpWidget(const MyApp());
+  testWidgets('Fase 1: Adicionar campo de texto', (WidgetTester tester) async {
+    await tester.pumpWidget(const MainApp());
+    expect(find.byType(TextField), findsOneWidget, 
+      reason: "Você precisa adicionar um widget do tipo TextField!");
+  });
 
-    // Verify that our counter starts at 0.
-    expect(find.text('0'), findsOneWidget);
-    expect(find.text('1'), findsNothing);
+  testWidgets('Fase 2: Interagir com o Slider', (WidgetTester tester) async {
+    await tester.pumpWidget(const MainApp());
+    await tester.drag(find.byType(Slider), const Offset(100, 0));
+    await tester.pump();
+    expect(find.byType(Slider), findsOneWidget, 
+      reason: "O Slider precisa existir e permitir interação.");
+  });
 
-    // Tap the '+' icon and trigger a frame.
-    await tester.tap(find.byIcon(Icons.add));
+  testWidgets('Fase 3: Seleção de RadioButtons', (WidgetTester tester) async {
+    await tester.pumpWidget(const MainApp());
+    await tester.tap(find.text('Retirada'));
+    await tester.pump();
+    expect(find.text('Retirada'), findsWidgets);
+  });
+
+  testWidgets('Fase 4: Checkbox de promoções', (WidgetTester tester) async {
+    await tester.pumpWidget(const MainApp());
+    await tester.tap(find.byType(Checkbox));
+    await tester.pump();
+    expect(tester.widget<Checkbox>(find.byType(Checkbox)).value, isTrue, 
+      reason: "O Checkbox deve mudar para verdadeiro ao ser clicado.");
+  });
+
+  testWidgets('Fase 5: Exibir resultado na tela', (WidgetTester tester) async {
+    await tester.pumpWidget(const MainApp());
+    
+    // Simula preenchimento completo
+    await tester.enterText(find.byType(TextField), 'Produto X');
+    await tester.tap(find.text('Cadastrar'));
     await tester.pump();
 
-    // Verify that our counter has incremented.
-    expect(find.text('0'), findsNothing);
-    expect(find.text('1'), findsOneWidget);
+    // Valida se o resultado apareceu
+    expect(find.textContaining('Produto X'), findsOneWidget, 
+      reason: "O texto final não foi exibido na tela após clicar em Cadastrar!");
   });
 }
