@@ -1,30 +1,42 @@
-// This is a basic Flutter widget test.
-//
-// To perform an interaction with a widget in your test, use the WidgetTester
-// utility in the flutter_test package. For example, you can send tap and scroll
-// gestures. You can also use WidgetTester to find child widgets in the widget
-// tree, read text, and verify that the values of widget properties are correct.
-
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-
-import 'package:ios/main.dart';
+// ATENÇÃO: Verifique se o nome do pacote abaixo está correto de acordo com seu projeto
+import 'package:anchieta_flutter/main.dart'; 
 
 void main() {
-  testWidgets('Counter increments smoke test', (WidgetTester tester) async {
-    // Build our app and trigger a frame.
+  testWidgets('Fase 1: Adicionar campo de texto', (WidgetTester tester) async {
     await tester.pumpWidget(const MyApp());
+    expect(find.byType(TextField), findsOneWidget);
+  });
 
-    // Verify that our counter starts at 0.
-    expect(find.text('0'), findsOneWidget);
-    expect(find.text('1'), findsNothing);
+  testWidgets('Fase 2: Interagir com o Slider', (WidgetTester tester) async {
+    await tester.pumpWidget(const MyApp());
+    await tester.drag(find.byType(Slider), const Offset(100, 0));
+    await tester.pump();
+    expect(find.byType(Slider), findsOneWidget);
+  });
 
-    // Tap the '+' icon and trigger a frame.
-    await tester.tap(find.byIcon(Icons.add));
+  testWidgets('Fase 3: Seleção de RadioButtons', (WidgetTester tester) async {
+    await tester.pumpWidget(const MyApp());
+    await tester.tap(find.text('Retirada'));
+    await tester.pump();
+    expect(find.text('Retirada'), findsWidgets);
+  });
+
+  testWidgets('Fase 4: Checkbox de promoções', (WidgetTester tester) async {
+    await tester.pumpWidget(const MyApp());
+    await tester.tap(find.byType(Checkbox));
+    await tester.pump();
+    expect(tester.widget<Checkbox>(find.byType(Checkbox)).value, isTrue);
+  });
+
+  testWidgets('Fase 5: Exibir resultado na tela', (WidgetTester tester) async {
+    await tester.pumpWidget(const MyApp());
+    
+    await tester.enterText(find.byType(TextField), 'Produto X');
+    await tester.tap(find.text('Cadastrar'));
     await tester.pump();
 
-    // Verify that our counter has incremented.
-    expect(find.text('0'), findsNothing);
-    expect(find.text('1'), findsOneWidget);
+    expect(find.textContaining('Produto X'), findsOneWidget);
   });
 }
