@@ -9,7 +9,9 @@ class MainApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(home: MyHomePage());
+    return const MaterialApp(
+      home: MyHomePage(),
+    );
   }
 }
 
@@ -21,20 +23,81 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+  String nome = '';
+  double qtd = 1;
+  String entrega = 'Carreto';
+  bool check = false;
+  String textoFinal = '';
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      home: Scaffold(
-        appBar: AppBar(title: Text('Olá Flutter')),
-        body: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
- 
-            ],
+    return Scaffold(
+      appBar: AppBar(title: const Text('Olá Flutter')),
+      body: Column(
+        children: [
+          TextField(
+            onChanged: (valor) {
+              nome = valor;
+            },
           ),
-        ),
+          Slider(
+            value: qtd,
+            min: 1,
+            max: 100,
+            onChanged: (valor) {
+              setState(() {
+                qtd = valor;
+              });
+            },
+          ),
+          RadioListTile(
+            title: const Text('Carreto'),
+            value: 'Carreto',
+            groupValue: entrega,
+            onChanged: (valor) {
+              setState(() {
+                entrega = valor.toString();
+              });
+            },
+          ),
+          RadioListTile(
+            title: const Text('Retirada'),
+            value: 'Retirada',
+            groupValue: entrega,
+            onChanged: (valor) {
+              setState(() {
+                entrega = valor.toString();
+              });
+            },
+          ),
+          RadioListTile(
+            title: const Text('Correio'),
+            value: 'Correio',
+            groupValue: entrega,
+            onChanged: (valor) {
+              setState(() {
+                entrega = valor.toString();
+              });
+            },
+          ),
+          Checkbox(
+            value: check,
+            onChanged: (valor) {
+              setState(() {
+                check = valor!;
+              });
+            },
+          ),
+          ElevatedButton(
+            onPressed: () {
+              setState(() {
+                textoFinal = 'Cadastrado com sucesso';
+              });
+            },
+            child: const Text('Cadastrar'),
+          ),
+          Text(textoFinal),
+        ],
       ),
     );
   }
