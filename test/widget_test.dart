@@ -41,7 +41,7 @@ void main() {
     await tester.pump();
 
     // Valida se o resultado apareceu
-    expect(find.textContaining('Produto X'), findsOneWidget, 
+    expect(find.textContaining('Produto: Produto X'), findsOneWidget, 
       reason: "O texto final não foi exibido na tela após clicar em Cadastrar!");
   });
 }
